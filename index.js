@@ -14,21 +14,21 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static(path.join(__dirname, 'public')))
 
-/*
-app.get('/', async (req, res) => {
-    try{
-        const totalUsuarios = await prisma.usuario.count();
-
-        res.send(`Servidor rodando! Total de usuários cadastrados: ${totalUsuarios}`)
-    } catch(erro){
-        console.error('Erro ao conectar no banco de dados:', erro)
-        res.status(500).send('Erro ao conectar no banco de dados')
-    }
-})
-*/
 
 app.get('/', (req, res) => {
     res.render('index', {titulo: 'Pousada - Home'})
+})
+
+app.get('/login', (req, res) => {
+    res.render('login', {titulo: 'Pousada - Login'})
+})
+
+app.post('/login', async (req, res) => {
+    const {email, senha} = req.body
+
+    try{
+        await prisma.usuario.findUnique()
+    }
 })
 
 app.listen(port, () => {
