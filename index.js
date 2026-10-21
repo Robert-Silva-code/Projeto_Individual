@@ -54,17 +54,6 @@ app.get('/reservas', autenticarJWT, async (req, res) => {
     }
 })
 
-app.get('/reservas/criar', autenticarJWT, async (req, res) => {
-    try {
-        const quartos = await prisma.quarto.findMany({
-            where: {disponivel: true}
-        })
-        res.render('reservas/criar', {titulo: 'Pousada - Criar Reserva', quartos, erro: null})
-    } catch (erro) {
-        console.error(erro)
-        res.status(500).send('Erro ao carregar formulário de reserva')
-    }
-})
 
 app.get('/quartos', autenticarJWT, async (req, res) => {
     try {

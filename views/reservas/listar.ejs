@@ -46,7 +46,7 @@
                     <td><%= reserva.status %></td>
                     <td>
                         <form action="/reservas/excluir/<%= reserva.id %>" method="POST" style="display:inline;" onsubmit="return confirm('Deseja realmente cancelar esta reserva?')">
-                            <button type="submit">Cancelar</button>
+                            <button type="submit" style="background-color: #e74c3c;">Cancelar</button>
                         </form>
                     </td>
                 </tr>

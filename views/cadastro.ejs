@@ -8,6 +8,11 @@
 </head>
 <body>
     <h1>Cadastre-se abaixo!</h1>
+
+    <% if (erro) { %>
+        <p style="color: red;"><%= erro %></p>
+    <% } %>
+    
     <form action="/cadastro" method="post">
         <div>
             <label for="nome">Nome:</label>
