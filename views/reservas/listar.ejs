@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title><%= titulo %></title>
+    <link rel='stylesheet' href='/css/style.css'>
+</head>
+<body>
+    <h1>Lista de Reservas</h1>
+    <a href="/">Voltar</a>
+    <hr>
+
+    <a href="/reservas/criar">Nova Reserva</a>
+    <br><br>
+    <% if (reservas.length === 0) { %>
+        <p>Nenhuma reserva encontrada.</p>
+    <% }else {%>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Hóspede</th>
+                <th>Quarto</th>
+                <th>Entrada</th>
+                <th> Saída</th>
+                <th>Valor Total</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%reservas.forEach(reserva => { %>
+                <tr>
+                    <td><%= reserva.usuario ? reserva.usuario.nome : reserva.usuarioId %></td>
+                    <td>
+                        <% if (reserva.quarto) { %>
+                            Quarto <%= reserva.quarto.numero %> (<%= reserva.quarto.tipo %>)
+                        <% } else { %>
+                            <%= reserva.quartoId %>
+                        <% } %>
+                    </td>
+                    <td><%= new Date(reserva.dataEntrada).toLocaleDateString('pt-BR') %></td>
+                    <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR') %></td>
+                    <td>R$ <%= reserva.valorTotal.toFixed(2) %></td>
+                    <td><%= reserva.status %></td>
+                    <td>
+                        <form action="/reservas/excluir/<%= reserva.id %>" method="POST" style="display:inline;" onsubmit="return confirm('Deseja realmente cancelar esta reserva?')">
+                            <button type="submit">Cancelar</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+<% } %>
+</body>
+</html>

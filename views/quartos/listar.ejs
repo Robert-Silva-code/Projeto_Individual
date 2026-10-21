@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title><%= titulo %></title>
+    <link rel='stylesheet' href='/css/style.css'>
+</head>
+<body>
+    <h1> Gerenciamento de quartos </h1>
+    <a href="/">Voltar</a>
+    <hr>
+
+    <% if (erro) { %>
+        <p style="color: red;"><%= erro %></p>
+    <% } %>
+
+    <h2> Cadastrar Quarto </h2>
+    <form action="/quartos" method="POST">
+        <label>Número:</label>
+        <input type="text" name="numero" required> <br>
+
+        <label>Tipo:</label>
+        <select name="tipo" required>
+            <option value="Solteiro">Solteiro</option>
+            <option value="Casal">Casal</option>
+            <option value="Luxo">Luxo</option>
+            <option value="Familia">Familia</option>
+        </select> <br><br>
+
+        <label>Preço da Diaria (R$):</label>
+        <input type="number" name="precoDiaria" step="0.01" required> <br><br>
+
+        <label>Disponivel:</label>
+        <input type="checkbox" name="disponivel" value="true" checked> <br><br>
+
+        <button type="submit">Cadastrar Quarto</button>
+    </form>
+
+    <hr>
+
+    <h2> Lista de Quartos </h2>
+    <% if (quartos.length === 0) { %>
+        <p>Nenhum quarto cadastrado.</p>
+    <% } else { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>Número</th>
+                    <th>Tipo</th>
+                    <th>Preço da Diária (R$)</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% quartos.forEach(quarto => { %>
+                    <tr>
+                        <td><%= quarto.numero %></td>
+                        <td><%= quarto.tipo %></td>
+                        <td><%= quarto.precoDiaria.toFixed(2) %></td>
+                        <td><%= quarto.disponivel ? 'Disponível' : 'Indisponível' %></td>
+                        <td>
+                            <a href="/quartos/editar/<%= quarto.id %>">Editar</a> |
+                            <form action="/quartos/excluir/<%= quarto.id %>" method="POST" style="display:inline;" onsubmit="return confirm('Deseja realmente excluir este quarto?')">
+                                <button type="submit">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } %>
+</body>
+</html>

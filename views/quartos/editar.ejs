@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title><%= titulo %></title>
+    <link rel='stylesheet' href='/css/style.css'>
+</head>
+<body>
+    <h1>Editar Quarto N° <%= quarto.numero %></h1>
+    <a href="/quartos">Voltar</a>
+    <hr>
+
+    <form action="/quartos/editar/<%= quarto.id %>" method="POST">
+        <label>Número:</label>
+        <input type="text" name="numero" value="<%= quarto.numero %>" required> <br>
+
+        <label>Tipo:</label>
+        <select name="tipo" required>
+            <option value="Solteiro" <%= quarto.tipo === 'Solteiro' ? 'selected' : '' %>>Solteiro</option>
+            <option value="Casal" <%= quarto.tipo === 'Casal' ? 'selected' : '' %>>Casal</option>
+            <option value="Luxo" <%= quarto.tipo === 'Luxo' ? 'selected' : '' %>>Luxo</option>
+            <option value="Familia" <%= quarto.tipo === 'Familia' ? 'selected' : '' %>>Familia</option>
+        </select> <br><br>
+
+        <label>Preço da Diaria (R$):</label><br>
+        <input type="number" name="precoDiaria" step="0.01" value="<%= quarto.precoDiaria %>" required> <br><br>
+
+        <label>Disponivel:</label>
+        <input type="checkbox" name="disponivel" value="true" <%= quarto.disponivel ? 'checked' : '' %>> <br><br>
+
+        <button type="submit">Salvar Alterações</button>
+    </form>
+</body>
+</html>

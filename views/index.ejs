@@ -5,9 +5,29 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title><%= titulo %></title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' href='/css/style.css'>
 </head>
 <body>
-    <h1>Bem-Vindo à Pousada!</h1>
-    <a href="/login">Fazer Login</a>
+    <header>
+        <nav>
+            <a href="/">Home</a> |
+            <a href="/quartos">Ver Quartos</a> |
+
+            <% if (usuarioLogado) { %>
+                <a href="/reservas">Minhas Reservas</a> |
+                <a href="/reservas/criar">Nova Reserva</a> |
+                <span> Olá, <strong><%= usuarioLogado.nome %></strong> (<%= usuarioLogado.tipo %>) </span> |
+                <a href="/logout" style="color: red">Sair</a>
+            <% } else { %>
+                <a href="/login">Fazer Login</a> |
+                <a href="/cadastro">Cadastre-se</a>
+            <% } %>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Bem vindo à Pousada!</h1>
+        <p>Aproveite sua estadia conosco. Navegue pelos quartos disponíveis e faça já a sua reserva.</p>
+    </main>
 </body>
 </html>
