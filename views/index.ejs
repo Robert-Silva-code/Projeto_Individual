@@ -16,6 +16,7 @@
             <% if (usuarioLogado) { %>
                 <a href="/reservas">Minhas Reservas</a> |
                 <a href="/reservas/criar">Nova Reserva</a> |
+                <a href="/usuarios">Configuração</a> |
                 <span> Olá, <strong><%= usuarioLogado.nome %></strong> (<%= usuarioLogado.tipo %>) </span> |
                 <a href="/logout" style="color: red">Sair</a>
             <% } else { %>

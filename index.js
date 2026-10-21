@@ -140,6 +140,83 @@ app.post('/cadastro', async (req, res) => {
     }
 })
 
+app.get('/usuarios', autenticarJWT, async (req, res) => {
+    try {
+        const usuario = await prisma.usuario.findUnique({
+            where: { id: req.user.id }
+        })
+        res.render('usuarios/index', { titulo: 'Configurações do Usuário', usuario, erro: null, sucesso: null})
+    } catch (erro) {
+        console.error(erro)
+        res.status(500).send('Erro ao carregar informações do usuário')
+    }
+})
+
+
+app.post('/usuarios/atualizar', autenticarJWT, async (req, res) => {
+    const { nome, email, senha } = req.body
+
+    try {
+        const dadosAtualizados = { nome, email }
+
+        if (senha && senha.trim() !== '') {
+            dadosAtualizados.senha = await bcrypt.hash(senha, 12)
+        }
+
+        const usuarioAtualizado = await prisma.usuario.update({
+            where: {id: req.user.id},
+            data: dadosAtualizados
+        })
+
+        const token = jwt.sign(
+            {id: usuarioAtualizado.id, nome: usuarioAtualizado.nome, email: usuarioAtualizado.email, tipo: usuarioAtualizado.tipo },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h'}
+        )
+
+        res.cookie('token', token, {httpOnly: true})
+
+        res.render('usuarios/index', {
+            titulo: 'Configurações do Usuário',
+            usuario: usuarioAtualizado,
+            erro: null,
+            sucesso: 'Perfil atualizado com sucesso!'
+        })
+    } catch (erro) {
+        console.error(erro)
+        const usuario = await prisma.usuario.findUnique({
+            where: {id: req.user.id}
+        })
+
+        res.render('usuarios/index', {
+            titulo: 'Configurações do Usuário',
+            usuario,
+            erro: 'Erro ao atualizar perfil',
+            sucesso: null
+        })
+    }
+})
+
+
+app.post('/usuarios/excluir', autenticarJWT, async (req, res) => {
+    try {
+        await prisma.reserva.deleteMany({
+            where: { usuarioId: req.user.id }
+        })
+
+        await prisma.usuario.delete({
+            where: { id: req.user.id }
+        })
+
+        res.clearCookie('token')
+        res.redirect('/login')
+    } catch (erro) {
+        console.error(erro)
+        res.status(500).send('Erro ao excluir conta')
+    }
+})
+
+
 app.post('/quartos', autenticarJWT, async (req, res) => {
     const {numero, tipo, precoDiaria, disponivel } = req.body
 

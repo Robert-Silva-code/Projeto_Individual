@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title><%= titulo %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Configurações da Conta</h1>
+    <a href="/">Voltar</a>
+    <hr>
+
+    <% if (erro) { %>
+        <p class="erro"><%= erro %></p>
+    <% } %>
+
+    <% if (sucesso) { %>
+        <p style="color: green; background: #e8f8f5; padding: 10px; border-radius: 4px;"><%= sucesso %></p>
+    <% } %>
+
+    <h2>Editar Perfil</h2>
+    <form action="/usuarios/atualizar" method="POST">
+        <label>Nome:</label><br>
+        <input type="text" name="nome" value="<%= usuario.nome %>" required> <br><br>
+
+        <label>E-Mail:</label><br>
+        <input type="email" name="email" value="<%= usuario.email %>" required> <br><br>
+
+        <label>Nova Senha:</label><br>
+        <input type="password" name="senha" placeholder="Digite se quiser mudar"> <br><br>
+
+        <button type="submit">Salvar Alterações</button>
+    </form>
+
+    <hr>
+
+    <h2>Excluir Conta</h2>
+    <form action="/usuarios/excluir" method="POST" onsubmit="return confirm('Tem certeza que quer excluir sua conta?')">
+        <button type="submit" style="background-color: #e74c3c;">Excluir minha conta</button>
+    </form>
+</body>
+</html>
