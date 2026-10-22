@@ -60,7 +60,11 @@ app.get('/quartos', autenticarJWT, async (req, res) => {
         const quartos = await prisma.quarto.findMany({
             orderBy: {numero: 'asc'}
         })
-        res.render('quartos/listar', {titulo: 'Pousada - Quartos', quartos, erro: null})
+
+        const usuario = await prisma.usuario.findUnique({
+            where: { id: req.user.id }
+        })
+        res.render('quartos/listar', {titulo: 'Pousada - Quartos', quartos, usuario, erro: null})
     } catch (erro) {
         console.error(erro)
         res.status(500).send('Erro ao carregar quartos')
@@ -207,9 +211,17 @@ app.post('/usuarios/excluir', autenticarJWT, async (req, res) => {
 
 
 app.post('/quartos', autenticarJWT, async (req, res) => {
+    if (req.user.tipo !== 'admin') {
+        return res.status(403).send('Acesso negado: Apenas administradores podem cadastrar quartos.')
+    }
+
+
     const {numero, tipo, precoDiaria, disponivel } = req.body
 
     try {
+        const usuario = await prisma.usuario.findUnique({
+            where: { id: req.user.id }
+        })
         const quartoExistente = await prisma.quarto.findUnique({
             where: { numero: parseInt(numero) }
         })
@@ -218,7 +230,7 @@ app.post('/quartos', autenticarJWT, async (req, res) => {
             const quartos = await prisma.quarto.findMany({
                 orderBy: { numero: 'asc' }
             })
-            return res.render('quartos/listar', { titulo: 'Pousada - Quartos', quartos, erro: 'Número de quarto já cadastrado' })
+            return res.render('quartos/listar', { titulo: 'Pousada - Quartos', quartos, usuario, erro: 'Número de quarto já cadastrado' })
         }
 
         await prisma.quarto.create({

@@ -14,7 +14,8 @@
     <% if (erro) { %>
         <p style="color: red;"><%= erro %></p>
     <% } %>
-
+    
+    <% if (usuario.tipo === "admin") { %>
     <h2> Cadastrar Quarto </h2>
     <form action="/quartos" method="POST">
         <label>Número:</label>
@@ -38,6 +39,9 @@
     </form>
 
     <hr>
+    <% } %>
+
+
 
     <h2> Lista de Quartos </h2>
     <% if (quartos.length === 0) { %>
